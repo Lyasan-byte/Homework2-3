@@ -7,20 +7,52 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct ContentViewEntrance: View {
+    @State var username: String = ""
+    @State var password: String = ""
+    @State var isAuthorized: User?
+    @State var hasError: Bool = false
+    
+    @StateObject private var userService: UserService = UserService()
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Image(systemName: "sos.circle.fill")
+                .font(.system(size: 26))
+                .foregroundStyle(.black)
+            Text("Lyasan-byte presents")
             
-            TextField("Login", text)
+            Text("Log in")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .padding(.top, 10)
+            
+            
+            TextField("Username", text: $username)
+            
+                .padding(.top, 30)
+            
+            SecureField("Password", text: $password)
+                .padding(.top, 20)
+            
+            Button(action: {
+                isAuthorized = userService.authorize(username: username, password: password)
+                hasError = (isAuthorized == nil)
+            }, label: {
+                Image(systemName: hasError ? "lock.trianglebadge.exclamationmark" : "lock")
+                    .font(.system(size:22))
+                    .padding(.top, 20)
+                    .foregroundStyle(Color.red)
+            })
+            
         }
         .padding()
+        .fullScreenCover(item: $isAuthorized) { user in
+            ContentViewProfile(user: user)
+        }
     }
 }
 
 #Preview {
-    ContentView()
+    ContentViewEntrance()
 }
