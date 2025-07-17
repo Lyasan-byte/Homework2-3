@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+enum Screen {
+    case main, favorites, profile
+}

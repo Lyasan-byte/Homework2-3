@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct Homework2App: App {
+    
+    @StateObject private var appState = AppState()
+        @StateObject private var userService = UserService()
     var body: some Scene {
         WindowGroup {
             ContentViewEntrance()
+                            .environmentObject(appState)
+                            .environmentObject(userService)
         }
     }
 }

@@ -1,19 +1,12 @@
-//
-//  ContentView.swift
-//  Homework2
-//
-//  Created by Ляйсан on 15.07.2025.
-//
-
 import SwiftUI
 
 struct ContentViewEntrance: View {
-    @State var username: String = ""
-    @State var password: String = ""
-    @State var isAuthorized: User?
-    @State var hasError: Bool = false
+    @State private var username: String = ""
+    @State private var password: String = ""
+    @State private var isAuthorized: User?
+    @State private var hasError: Bool = false
     
-    @StateObject private var userService: UserService = UserService()
+    @EnvironmentObject private var userService: UserService
     
     var body: some View {
         VStack {
@@ -27,9 +20,7 @@ struct ContentViewEntrance: View {
                 .fontWeight(.bold)
                 .padding(.top, 10)
             
-            
             TextField("Username", text: $username)
-            
                 .padding(.top, 30)
             
             SecureField("Password", text: $password)
@@ -38,13 +29,12 @@ struct ContentViewEntrance: View {
             Button(action: {
                 isAuthorized = userService.authorize(username: username, password: password)
                 hasError = (isAuthorized == nil)
-            }, label: {
+            }) {
                 Image(systemName: hasError ? "lock.trianglebadge.exclamationmark" : "lock")
-                    .font(.system(size:22))
+                    .font(.system(size: 22))
                     .padding(.top, 20)
                     .foregroundStyle(Color.red)
-            })
-            
+            }
         }
         .padding()
         .fullScreenCover(item: $isAuthorized) { user in
@@ -55,4 +45,5 @@ struct ContentViewEntrance: View {
 
 #Preview {
     ContentViewEntrance()
+        .environmentObject(UserService())
 }

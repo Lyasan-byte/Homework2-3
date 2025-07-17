@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+class AppState: ObservableObject {
+    @Published var currentScreen: Screen = .profile
+    
+    enum Screen {
+        case main, favorites, profile
+    }
+}
